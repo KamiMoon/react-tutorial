@@ -13,6 +13,12 @@ function Square(props) {
 
 class Board extends React.Component {
 
+    board = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8]
+    ];
+
     renderSquare(i) {
         return (
             <Square
@@ -26,21 +32,15 @@ class Board extends React.Component {
 
         return (
             <div>
-                <div className="board-row">
-                    {this.renderSquare(0)}
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                </div>
+                {this.board.map((rows, index) => {
+                    return (
+                        <div className="board-row" key={index}>
+                            {rows.map((cell) => {
+                                return <span key={cell}>{this.renderSquare(cell)}</span>;
+                            })}
+                        </div>
+                    );
+                })}
             </div>
         );
     }
@@ -91,10 +91,13 @@ class Game extends React.Component {
             const desc = move ?
                 'Move #' + move :
                 'Game start';
+
+            const className = this.state.stepNumber === move ? "bold" : "";
+
             return (
                 <li key={move}>
-                    <a href="#" onClick={() => this.jumpTo(move)}>{desc}</a>
-                </li>
+                    <a href="#" onClick={() => this.jumpTo(move)} className={className} >{desc}</a>
+                </li >
             );
         });
 
