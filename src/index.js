@@ -55,6 +55,7 @@ class Game extends React.Component {
             }],
             stepNumber: 0,
             xIsNext: true,
+            reverseOrder: false
         };
     }
 
@@ -82,12 +83,24 @@ class Game extends React.Component {
         });
     }
 
+    toggleSort = () => {
+        this.setState({
+            reverseOrder: !this.state.reverseOrder
+        })
+    }
+
     render() {
         const history = this.state.history;
         const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares);
 
-        const moves = history.map((step, move) => {
+        const historyCopyIndexes = [...history.keys()];
+
+        if (this.state.reverseOrder) {
+            historyCopyIndexes.reverse();
+        }
+
+        const moves = historyCopyIndexes.map((move) => {
             const desc = move ?
                 'Move #' + move :
                 'Game start';
@@ -119,6 +132,7 @@ class Game extends React.Component {
                 <div className="game-info">
                     <div>{status}</div>
                     <ol>{moves}</ol>
+                    <button onClick={this.toggleSort}>Toggle Sort: {this.state.reverseOrder.toString()}</button>
                 </div>
             </div>
         );
